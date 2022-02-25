@@ -2,8 +2,7 @@
 
 int main()
 {
-    Sorted_List super_list{};
-    super_list.print_all();
-
+    Sorted_List value_list{1,22, 2, 300, -6, 8};
+    value_list.print_all();
     return 0;
 }
