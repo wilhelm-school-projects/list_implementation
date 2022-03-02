@@ -19,9 +19,44 @@ Sorted_List::Sorted_List(initializer_list<int> init_list)
     }
 }
 
+//Copy constructor
+Sorted_List::Sorted_List(Sorted_List const& copy_from)
+{   
+    construct_sentinel();
+    copy(head, copy_from.head);
+}
+
+//Move constructor
+Sorted_List::Sorted_List(Sorted_List && move_from)
+{   
+    head = move_from.head;
+    tail = move_from.tail;
+    move_from.head = nullptr;
+    move_from.tail = nullptr;
+}
+
 Sorted_List::~Sorted_List()
 {
     remove_list(head);
+}
+//Copy Assignment
+Sorted_List& Sorted_List::operator=(Sorted_List const& copy_from)
+{
+    copy(head, copy_from.head);
+    return *this;
+}
+
+//Move Assignment
+Sorted_List& Sorted_List::operator=(Sorted_List && move_from)
+{
+    delete tail;
+    
+    head = move_from.head;
+    tail = move_from.tail;
+    move_from.head = nullptr;
+    move_from.tail = nullptr;
+
+    return *this;
 }
 
 Sorted_List::Node::Node(Node* next, Node* prev, int value)
@@ -43,9 +78,7 @@ void Sorted_List::print_all()
 
 bool Sorted_List::is_empty()
 {
-    if (head == tail)
-        return true;
-    return false;
+    return head == tail;
 }
 
 void Sorted_List::insert(int new_value)
@@ -54,6 +87,16 @@ void Sorted_List::insert(int new_value)
 }
 
 /* Private functions */
+
+void Sorted_List::copy(Node*& to, Node* const& from)
+{
+    if (!(from->next == nullptr))
+    {
+        construct_node(from->value, to);
+        copy(to->next, from->next);
+    }
+}
+
 void Sorted_List::insert(int new_value, Node* &curr)
 {
     if (is_empty())
